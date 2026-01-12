@@ -2,6 +2,9 @@ import { useAdapters } from "@/shared/adapters/core/app";
 import { QueryError, SuspenseLoader } from "@/shared/components";
 import { useQueryUserGame } from "../app";
 import { GameLobby } from "./game-lobby";
+import { WaitingForPlayer } from "./waiting-for-player";
+
+const TOTAL_PLAYERS = 2;
 
 export function Game() {
 	const { authAdapter } = useAdapters();
@@ -27,6 +30,8 @@ export function Game() {
 	if (userGame.isSuccess && authAdapter.session.type === "authenticated")
 		return userGame.data === null ? (
 			<GameLobby userId={authAdapter.session.userId} />
+		) : userGame.data.userIds.length < TOTAL_PLAYERS ? (
+			<WaitingForPlayer game={userGame.data} />
 		) : null;
 
 	return <SuspenseLoader style={{ height: "32rem" }} />;
