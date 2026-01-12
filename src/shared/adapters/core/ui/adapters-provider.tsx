@@ -1,7 +1,7 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { HashRouter } from "react-router";
 import { useMockAnalyticsProvider } from "@/shared/adapters/analytics/infra";
-import { usePersistenceAuthAdapter } from "@/shared/adapters/auth/infra";
+import { useAuthAdapter } from "@/shared/adapters/auth/infra";
 import { AuthProvider } from "@/shared/adapters/auth/ui";
 import { useMockErrorMonitoringAdapter } from "@/shared/adapters/error-monitoring/infra";
 import { NavigationAdapter } from "@/shared/adapters/navigation/infra";
@@ -54,7 +54,7 @@ function AdaptersProviderDependencyInjection({ children }: PropsWithChildren) {
 	const uuidAdapter = useUuidAdapter();
 
 	const analyticsAdapter = useMockAnalyticsProvider();
-	const authAdapter = usePersistenceAuthAdapter(persistenceAdapter);
+	const authAdapter = useAuthAdapter();
 	const errorMonitoringAdapter = useMockErrorMonitoringAdapter();
 	const notificationAdapter = useNotificationAdapter({
 		uuidAdapter,

@@ -1,1 +1,1 @@
-export * from "./use-persistence-auth-adapter";
+export * from "./use-auth-adapter";

@@ -4,5 +4,5 @@ export type ISession =
 	  }
 	| {
 			type: "authenticated";
-			token: string;
+			userId: string;
 	  };

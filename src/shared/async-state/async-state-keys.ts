@@ -1,5 +1,8 @@
 export enum QueryKeys {
 	QUERY_TODOS = "Query Todos",
+
+	AVAILABLE_ROOMS = "Available Rooms",
+	USER_GAME = "User Game",
 }
 
 export enum MutationKeys {
@@ -8,6 +11,6 @@ export enum MutationKeys {
 	DELETE_TODO = "Delete Todo",
 	PATCH_TODO = "Patch Todo",
 
-	// LOGIN
-	LOGIN = "Login",
+	// CONNECTION
+	JOIN = "Join",
 }

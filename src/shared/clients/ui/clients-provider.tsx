@@ -1,4 +1,5 @@
 import { type PropsWithChildren, useMemo } from "react";
+import { ConnectionClient } from "@/features/connection/infra";
 import { useTodoClient } from "@/features/todo/infra";
 import { ClientsContext } from "../app";
 import type { IClients } from "../domain";
@@ -18,6 +19,7 @@ export function ClientsProvider({ children }: PropsWithChildren) {
 
 	const clients: IClients = useMemo(
 		() => ({
+			connectionClient: new ConnectionClient(),
 			todoClient,
 		}),
 		[todoClient],
