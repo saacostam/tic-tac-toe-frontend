@@ -1,6 +1,7 @@
 import { useAdapters } from "@/shared/adapters/core/app";
 import { QueryError, SuspenseLoader } from "@/shared/components";
 import { useQueryUserGame } from "../app";
+import { GameBoard } from "./game-board";
 import { GameLobby } from "./game-lobby";
 import { WaitingForPlayer } from "./waiting-for-player";
 
@@ -32,7 +33,9 @@ export function Game() {
 			<GameLobby userId={authAdapter.session.userId} />
 		) : userGame.data.userIds.length < TOTAL_PLAYERS ? (
 			<WaitingForPlayer game={userGame.data} />
-		) : null;
+		) : (
+			<GameBoard game={userGame.data} userId={authAdapter.session.userId} />
+		);
 
 	return <SuspenseLoader style={{ height: "32rem" }} />;
 }

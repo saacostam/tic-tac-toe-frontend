@@ -106,4 +106,60 @@ describe("gameService", () => {
 			expect(result).toEqual({ hasWin: false });
 		});
 	});
+
+	describe("createBoardFromTurns", () => {
+		it("creates an empty board when there are no turns", () => {
+			const board = gameService.createBoardFromTurns([]);
+
+			expect(board).toEqual([
+				[null, null, null],
+				[null, null, null],
+				[null, null, null],
+			]);
+		});
+
+		it("places turns in the correct coordinates", () => {
+			const board = gameService.createBoardFromTurns([
+				{ x: 0, y: 0, playerId: "p1" },
+				{ x: 2, y: 1, playerId: "p2" },
+				{ x: 1, y: 2, playerId: "p1" },
+			]);
+
+			expect(board).toEqual([
+				["p1", null, null],
+				[null, null, "p2"],
+				[null, "p1", null],
+			]);
+		});
+
+		it("leaves untouched cells as null", () => {
+			const board = gameService.createBoardFromTurns([
+				{ x: 1, y: 1, playerId: "p1" },
+			]);
+
+			expect(board[0][0]).toBeNull();
+			expect(board[0][2]).toBeNull();
+			expect(board[2][2]).toBeNull();
+		});
+
+		it("does not overwrite an already occupied cell", () => {
+			const board = gameService.createBoardFromTurns([
+				{ x: 1, y: 1, playerId: "p1" },
+				{ x: 1, y: 1, playerId: "p2" }, // should be ignored
+			]);
+
+			expect(board[1][1]).toBe("p1");
+		});
+
+		it("always returns a 3x3 board", () => {
+			const board = gameService.createBoardFromTurns([
+				{ x: 0, y: 0, playerId: "p1" },
+			]);
+
+			expect(board).toHaveLength(3);
+			board.forEach((row) => {
+				expect(row).toHaveLength(3);
+			});
+		});
+	});
 });

@@ -1,4 +1,4 @@
-import type { IGame } from "./game";
+import type { IGame, WithTurns } from "./game";
 
 export interface IGameClient {
 	createGame(args: IGameClientPayload["CreateGameReq"]): Promise<void>;
@@ -6,7 +6,7 @@ export interface IGameClient {
 	queryGames(): Promise<IGame[]>;
 	queryUserGame(
 		args: IGameClientPayload["QueryUserGameReq"],
-	): Promise<IGame | null>;
+	): Promise<WithTurns<IGame> | null>;
 }
 
 export interface IGameClientPayload {

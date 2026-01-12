@@ -49,6 +49,20 @@ class GameService {
 		};
 	}
 
+	createBoardFromTurns(turns: ITurn[]): IBoard {
+		const board = this.createEmptyBoard();
+
+		turns.forEach((turn) => {
+			const cell = board.at(turn.y)?.at(turn.x);
+
+			if (cell === null) {
+				board[turn.y][turn.x] = turn.playerId;
+			}
+		});
+
+		return board;
+	}
+
 	private checkWinConditionForUserId(board: IBoard, playerId: string): boolean {
 		const horizontal = [0, 1, 2].some((rowIndex) => {
 			const row = board[rowIndex];
@@ -74,20 +88,6 @@ class GameService {
 			board[2][0] === playerId;
 
 		return horizontal || vertical || diag1 || diag2;
-	}
-
-	private createBoardFromTurns(turns: ITurn[]): IBoard {
-		const board = this.createEmptyBoard();
-
-		turns.forEach((turn) => {
-			const cell = board.at(turn.y)?.at(turn.x);
-
-			if (cell === null) {
-				board[turn.y][turn.x] = turn.playerId;
-			}
-		});
-
-		return board;
 	}
 
 	private createEmptyBoard(): IBoard {
