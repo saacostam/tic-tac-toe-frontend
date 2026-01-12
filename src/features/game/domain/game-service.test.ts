@@ -1,0 +1,109 @@
+import { describe, expect, it } from "vitest";
+import type { IGame, ITurn, WithTurns } from "./game";
+import { gameService } from "./game-service";
+
+const createGame = (turns: ITurn[]): WithTurns<IGame> => ({
+	id: "game-1",
+	userIds: ["p1", "p2"],
+	turns,
+});
+
+describe("gameService", () => {
+	describe("canApplyTurn", () => {
+		it("returns true when the cell is empty", () => {
+			const game = createGame([{ x: 0, y: 0, playerId: "p1" }]);
+
+			const turn: ITurn = { x: 1, y: 1, playerId: "p2" };
+
+			expect(gameService.canApplyTurn(game, turn)).toBe(true);
+		});
+
+		it("returns false when the cell is already occupied", () => {
+			const game = createGame([{ x: 1, y: 1, playerId: "p1" }]);
+
+			const turn: ITurn = { x: 1, y: 1, playerId: "p2" };
+
+			expect(gameService.canApplyTurn(game, turn)).toBe(false);
+		});
+	});
+
+	describe("checkWinCondition", () => {
+		const players = {
+			player1UserId: "p1",
+			player2UserId: "p2",
+		};
+
+		it("detects a horizontal win", () => {
+			const game = createGame([
+				{ x: 0, y: 0, playerId: "p1" },
+				{ x: 1, y: 0, playerId: "p1" },
+				{ x: 2, y: 0, playerId: "p1" },
+			]);
+
+			const result = gameService.checkWinCondition(game, players);
+
+			expect(result).toEqual({
+				hasWin: true,
+				winnerUserId: "p1",
+			});
+		});
+
+		it("detects a vertical win", () => {
+			const game = createGame([
+				{ x: 1, y: 0, playerId: "p2" },
+				{ x: 1, y: 1, playerId: "p2" },
+				{ x: 1, y: 2, playerId: "p2" },
+			]);
+
+			const result = gameService.checkWinCondition(game, players);
+
+			expect(result).toEqual({
+				hasWin: true,
+				winnerUserId: "p2",
+			});
+		});
+
+		it("detects a diagonal win (top-left to bottom-right)", () => {
+			const game = createGame([
+				{ x: 0, y: 0, playerId: "p1" },
+				{ x: 1, y: 1, playerId: "p1" },
+				{ x: 2, y: 2, playerId: "p1" },
+			]);
+
+			const result = gameService.checkWinCondition(game, players);
+
+			expect(result).toEqual({
+				hasWin: true,
+				winnerUserId: "p1",
+			});
+		});
+
+		it("detects a diagonal win (top-right to bottom-left)", () => {
+			const game = createGame([
+				{ x: 2, y: 0, playerId: "p2" },
+				{ x: 1, y: 1, playerId: "p2" },
+				{ x: 0, y: 2, playerId: "p2" },
+			]);
+
+			const result = gameService.checkWinCondition(game, players);
+
+			expect(result).toEqual({
+				hasWin: true,
+				winnerUserId: "p2",
+			});
+		});
+
+		it("returns hasWin=false when no player has won", () => {
+			const game = createGame([
+				{ x: 0, y: 0, playerId: "p1" },
+				{ x: 1, y: 0, playerId: "p2" },
+				{ x: 2, y: 0, playerId: "p1" },
+				{ x: 0, y: 1, playerId: "p2" },
+			]);
+
+			const result = gameService.checkWinCondition(game, players);
+
+			expect(result).toEqual({ hasWin: false });
+		});
+	});
+});
