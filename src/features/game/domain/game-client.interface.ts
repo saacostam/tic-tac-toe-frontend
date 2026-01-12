@@ -1,9 +1,10 @@
-import type { IRoom } from "./game";
+import type { IGame } from "./game";
 
 export interface IGameClient {
+	queryGames(): Promise<IGame[]>;
 	queryUserGame(
 		args: IGameClientPayload["QueryUserGameReq"],
-	): Promise<IRoom | null>;
+	): Promise<IGame | null>;
 }
 
 export interface IGameClientPayload {
