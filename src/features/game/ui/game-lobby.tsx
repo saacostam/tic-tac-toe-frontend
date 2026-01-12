@@ -121,7 +121,7 @@ export function GameLobby({ userId }: GameLobbyProps) {
 												backgroundColor:
 													game.userIds.length < 2
 														? "var(--mantine-color-yellow-5)"
-														: "var(--mantine-color-success-5)",
+														: "var(--mantine-color-green-5)",
 												height: "1rem",
 												width: "1rem",
 											}}
