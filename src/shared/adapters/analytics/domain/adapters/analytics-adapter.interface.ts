@@ -1,7 +1,4 @@
-export type IAnalyticsEvent =
-	| { name: "login"; payload: { success: boolean } }
-	| { name: "createTodo"; payload: { todoId: string } }
-	| { name: "deleteTodo"; payload: { todoId: string } };
+export type IAnalyticsEvent = { name: "join"; payload: { success: boolean } };
 
 export interface IAnalyticsAdapter {
 	trackEvent(event: IAnalyticsEvent): void;

@@ -26,8 +26,13 @@ const connectionSchema = z.object({
 });
 
 export function Connection() {
-	const { authAdapter, navigationAdapter, notificationAdapter, routerAdapter } =
-		useAdapters();
+	const {
+		analyticsAdapter,
+		authAdapter,
+		navigationAdapter,
+		notificationAdapter,
+		routerAdapter,
+	} = useAdapters();
 
 	const queryClient = useQueryClient();
 
@@ -53,6 +58,13 @@ export function Connection() {
 									name: RouteName.HOME,
 								}),
 							);
+
+							analyticsAdapter.trackEvent({
+								name: "join",
+								payload: {
+									success: true,
+								},
+							});
 						} else {
 							notificationAdapter.notify({
 								type: "error",
@@ -94,11 +106,19 @@ export function Connection() {
 							error: e,
 							setError: form.setError,
 						});
+
+						analyticsAdapter.trackEvent({
+							name: "join",
+							payload: {
+								success: false,
+							},
+						});
 					},
 				},
 			);
 		},
 		[
+			analyticsAdapter.trackEvent,
 			authAdapter.removeToken,
 			authAdapter.setToken,
 			form.setError,
