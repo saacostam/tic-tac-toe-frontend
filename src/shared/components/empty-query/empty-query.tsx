@@ -18,7 +18,7 @@ export function EmptyQuery({
 			<Title order={4} size="lg" mb={4}>
 				{title}
 			</Title>
-			<Text c="gray" size="sm">
+			<Text c="var(--mantine-color-dark-2)" size="sm">
 				{description}
 			</Text>
 		</Flex>
