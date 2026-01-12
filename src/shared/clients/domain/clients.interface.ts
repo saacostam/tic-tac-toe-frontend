@@ -1,6 +1,5 @@
 import type { IConnectionClient } from "@/features/connection/domain";
 import type { IGameClient } from "@/features/game/domain";
-import type { ITodoClient } from "@/features/todo/domain";
 
 /**
  * Interface for managing various application clients.
@@ -8,5 +7,4 @@ import type { ITodoClient } from "@/features/todo/domain";
 export interface IClients {
 	connectionClient: IConnectionClient;
 	gameClient: IGameClient;
-	todoClient: ITodoClient;
 }
