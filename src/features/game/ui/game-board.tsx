@@ -91,7 +91,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 												borderColor: isValidMove
 													? "var(--mantine-color-green-5)"
 													: "",
-												cursor: "pointer",
+												cursor: isValidMove ? "pointer" : "",
 											}}
 											onClick={() => onClickCell(x, y)}
 											withBorder
