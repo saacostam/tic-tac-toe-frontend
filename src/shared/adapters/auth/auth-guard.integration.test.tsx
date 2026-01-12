@@ -57,7 +57,7 @@ describe("AuthGuard [Integration]", () => {
 			pathname: navigationAdapter.generateRoute({
 				name: RouteName.HOME,
 			}),
-			authState: { type: "authenticated", userId: "token" },
+			authState: { type: "authenticated", userId: "token", onClear: () => {} },
 		});
 
 		renderWithProviders(
@@ -104,7 +104,7 @@ describe("AuthGuard [Integration]", () => {
 			pathname: navigationAdapter.generateRoute({
 				name: RouteName.LANDING,
 			}),
-			authState: { type: "authenticated", userId: "token" },
+			authState: { type: "authenticated", userId: "token", onClear: () => {} },
 		});
 
 		renderWithProviders(

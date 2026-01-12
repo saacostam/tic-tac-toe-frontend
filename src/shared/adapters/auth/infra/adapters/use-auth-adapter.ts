@@ -7,15 +7,20 @@ export const useAuthAdapter = (): IAuthAdapter => {
 	});
 
 	const removeToken = useCallback(() => {
-		setSession({
-			type: "unauthenticated",
+		setSession((value) => {
+			if (value.type === "authenticated") value.onClear();
+
+			return {
+				type: "unauthenticated",
+			};
 		});
 	}, []);
 
-	const setToken = useCallback((userId: string) => {
+	const setToken = useCallback((userId: string, onClear: () => void) => {
 		setSession({
 			type: "authenticated",
 			userId: userId,
+			onClear,
 		});
 	}, []);
 

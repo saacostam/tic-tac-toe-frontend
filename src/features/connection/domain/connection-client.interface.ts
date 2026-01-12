@@ -1,4 +1,5 @@
 export interface IConnectionClient {
+	close(): void;
 	join(args: IConnectionClientPayload["JoinIn"]): Promise<void>;
 }
 

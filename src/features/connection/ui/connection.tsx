@@ -15,6 +15,7 @@ import z from "zod";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { RouteName } from "@/shared/adapters/navigation/domain";
 import { QueryKeys } from "@/shared/async-state";
+import { useClients } from "@/shared/clients/app";
 import { FormUtils } from "@/shared/utils/form";
 import { useMutationJoin } from "../app";
 
@@ -33,6 +34,7 @@ export function Connection() {
 		notificationAdapter,
 		routerAdapter,
 	} = useAdapters();
+	const { connectionClient } = useClients();
 
 	const queryClient = useQueryClient();
 
@@ -47,12 +49,20 @@ export function Connection() {
 
 	const onSubmit = useCallback(
 		(data: ReturnType<typeof connectionSchema.parse>) => {
+			const cleanup = () => {
+				authAdapter.removeToken();
+				queryClient.removeQueries();
+			};
+
 			join.mutate(
 				{
 					name: data.name,
 					onConnect: (id) => {
 						if (id) {
-							authAdapter.setToken(id);
+							authAdapter.setToken(id, () => {
+								connectionClient.close();
+								cleanup();
+							});
 							routerAdapter.push(
 								navigationAdapter.generateRoute({
 									name: RouteName.HOME,
@@ -73,11 +83,11 @@ export function Connection() {
 						}
 					},
 					onDisconnect: () => {
-						authAdapter.removeToken();
 						notificationAdapter.notify({
 							type: "error",
 							msg: "Disconnected from server",
 						});
+						cleanup();
 					},
 					onGamesChanged: () => {
 						queryClient.invalidateQueries({
@@ -121,11 +131,13 @@ export function Connection() {
 			analyticsAdapter.trackEvent,
 			authAdapter.removeToken,
 			authAdapter.setToken,
+			connectionClient.close,
 			form.setError,
 			join.mutate,
 			navigationAdapter.generateRoute,
 			notificationAdapter.notify,
 			queryClient.invalidateQueries,
+			queryClient.removeQueries,
 			routerAdapter.push,
 		],
 	);

@@ -5,4 +5,5 @@ export type ISession =
 	| {
 			type: "authenticated";
 			userId: string;
+			onClear: () => void;
 	  };

@@ -2,9 +2,21 @@ import { DomainError, DomainErrorType } from "@/shared/errors/domain";
 import type { IConnectionClient, IConnectionClientPayload } from "../domain";
 
 export class ConnectionClient implements IConnectionClient {
+	private socket: WebSocket | null = null;
+	private isCleanDisconnection: boolean = false;
+
+	close(): void {
+		if (this.socket) {
+			this.isCleanDisconnection = true;
+			this.socket.close();
+		}
+	}
+
 	join(args: IConnectionClientPayload["JoinIn"]): Promise<void> {
 		return new Promise((res, rej) => {
 			const socket = new WebSocket(`ws://localhost:8000/ws/${args.name}`);
+			this.isCleanDisconnection = false;
+			this.socket = socket;
 
 			let settled = false;
 			let opened = false;
@@ -54,7 +66,7 @@ export class ConnectionClient implements IConnectionClient {
 				}
 
 				// Normal disconnect after a successful connection
-				args.onDisconnect();
+				if (!this.isCleanDisconnection) args.onDisconnect();
 			};
 
 			const onMessage = (event: MessageEvent) => {
