@@ -21,7 +21,7 @@ const MAIN_LINKS: {
 }[] = [] as const;
 
 export function AppLayout({ children }: PropsWithChildren) {
-	const { authAdapter, navigationAdapter } = useAdapters();
+	const { sessionAdapter, navigationAdapter } = useAdapters();
 
 	const [opened, { toggle }] = useDisclosure();
 
@@ -37,8 +37,8 @@ export function AppLayout({ children }: PropsWithChildren) {
 	);
 
 	const onClickRename = useCallback(
-		() => authAdapter.removeToken(),
-		[authAdapter.removeToken],
+		() => sessionAdapter.removeToken(),
+		[sessionAdapter.removeToken],
 	);
 
 	return (

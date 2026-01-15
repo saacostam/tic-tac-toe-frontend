@@ -4,8 +4,8 @@ import { useAdapters } from "@/shared/adapters/core/app";
 import { RouteName } from "@/shared/adapters/navigation/domain";
 
 export function useConnectionGuard() {
-	const { authAdapter, routerAdapter, navigationAdapter } = useAdapters();
-	const { session } = authAdapter;
+	const { sessionAdapter, routerAdapter, navigationAdapter } = useAdapters();
+	const { session } = sessionAdapter;
 
 	const publicRoutesPaths = useMemo(
 		() =>

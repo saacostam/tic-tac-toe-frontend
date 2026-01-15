@@ -13,7 +13,7 @@ describe("Connection [Integration]", () => {
 			renderWithProviders(<Connection />, {
 				adapters: {
 					analyticsAdapter: {},
-					authAdapter: {},
+					sessionAdapter: {},
 					navigationAdapter: {},
 					notificationAdapter: {},
 					routerAdapter: {},
@@ -40,7 +40,7 @@ describe("Connection [Integration]", () => {
 			renderWithProviders(<Connection />, {
 				adapters: {
 					analyticsAdapter: {},
-					authAdapter: {},
+					sessionAdapter: {},
 					navigationAdapter: {},
 					notificationAdapter: {},
 					routerAdapter: {},
@@ -77,7 +77,7 @@ describe("Connection [Integration]", () => {
 					analyticsAdapter: {
 						trackEvent,
 					},
-					authAdapter: {},
+					sessionAdapter: {},
 					navigationAdapter: {},
 					notificationAdapter: {},
 					routerAdapter: {},

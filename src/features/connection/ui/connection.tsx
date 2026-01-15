@@ -29,7 +29,7 @@ const connectionSchema = z.object({
 export function Connection() {
 	const {
 		analyticsAdapter,
-		authAdapter,
+		sessionAdapter,
 		navigationAdapter,
 		notificationAdapter,
 		routerAdapter,
@@ -50,7 +50,7 @@ export function Connection() {
 	const onSubmit = useCallback(
 		(data: ReturnType<typeof connectionSchema.parse>) => {
 			const cleanup = () => {
-				authAdapter.removeToken();
+				sessionAdapter.removeToken();
 				queryClient.removeQueries();
 			};
 
@@ -59,7 +59,7 @@ export function Connection() {
 					name: data.name,
 					onConnect: (id) => {
 						if (id) {
-							authAdapter.setToken(id, () => {
+							sessionAdapter.setToken(id, () => {
 								connectionClient.close();
 								cleanup();
 							});
@@ -129,8 +129,8 @@ export function Connection() {
 		},
 		[
 			analyticsAdapter.trackEvent,
-			authAdapter.removeToken,
-			authAdapter.setToken,
+			sessionAdapter.removeToken,
+			sessionAdapter.setToken,
 			connectionClient.close,
 			form.setError,
 			join.mutate,

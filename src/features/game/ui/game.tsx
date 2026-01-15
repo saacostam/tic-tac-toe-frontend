@@ -8,16 +8,16 @@ import { WaitingForPlayer } from "./waiting-for-player";
 const TOTAL_PLAYERS = 2;
 
 export function Game() {
-	const { authAdapter } = useAdapters();
+	const { sessionAdapter } = useAdapters();
 
 	const userGameQuery = useQueryUserGame({
 		userId:
-			(authAdapter.session.type === "authenticated" &&
-				authAdapter.session.userId) ||
+			(sessionAdapter.session.type === "authenticated" &&
+				sessionAdapter.session.userId) ||
 			"",
 		enabled:
-			authAdapter.session.type === "authenticated" &&
-			!!authAdapter.session.userId,
+			sessionAdapter.session.type === "authenticated" &&
+			!!sessionAdapter.session.userId,
 	});
 	const userGame = userGameQuery.useQuery();
 
@@ -28,16 +28,16 @@ export function Game() {
 				retry={{ onClick: userGame.refetch, isPending: userGame.isLoading }}
 			/>
 		);
-	if (userGame.isSuccess && authAdapter.session.type === "authenticated")
+	if (userGame.isSuccess && sessionAdapter.session.type === "authenticated")
 		return userGame.data === null ? (
-			<GameLobby userId={authAdapter.session.userId} />
+			<GameLobby userId={sessionAdapter.session.userId} />
 		) : userGame.data.userIds.length < TOTAL_PLAYERS ? (
 			<WaitingForPlayer game={userGame.data} />
 		) : (
 			<GameBoard
 				game={userGame.data}
 				optimSetter={userGameQuery.setOptimisticData}
-				userId={authAdapter.session.userId}
+				userId={sessionAdapter.session.userId}
 			/>
 		);
 

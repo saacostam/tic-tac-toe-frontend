@@ -1,7 +1,7 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { HashRouter } from "react-router";
 import { useMockAnalyticsProvider } from "@/shared/adapters/analytics/infra";
-import { useAuthAdapter } from "@/shared/adapters/auth/infra";
+import { useSessionAdapter } from "@/shared/adapters/auth/infra";
 import { useMockErrorMonitoringAdapter } from "@/shared/adapters/error-monitoring/infra";
 import { NavigationAdapter } from "@/shared/adapters/navigation/infra";
 import { NavigationProvider } from "@/shared/adapters/navigation/ui";
@@ -51,7 +51,7 @@ function AdaptersProviderDependencyInjection({ children }: PropsWithChildren) {
 	const uuidAdapter = useUuidAdapter();
 
 	const analyticsAdapter = useMockAnalyticsProvider();
-	const authAdapter = useAuthAdapter();
+	const sessionAdapter = useSessionAdapter();
 	const errorMonitoringAdapter = useMockErrorMonitoringAdapter();
 	const notificationAdapter = useNotificationAdapter({
 		uuidAdapter,
@@ -64,7 +64,7 @@ function AdaptersProviderDependencyInjection({ children }: PropsWithChildren) {
 	const adapters: IAdapters = useMemo(
 		() => ({
 			analyticsAdapter,
-			authAdapter,
+			sessionAdapter,
 			errorMonitoringAdapter,
 			navigationAdapter,
 			notificationAdapter,
@@ -75,7 +75,7 @@ function AdaptersProviderDependencyInjection({ children }: PropsWithChildren) {
 		}),
 		[
 			analyticsAdapter,
-			authAdapter,
+			sessionAdapter,
 			errorMonitoringAdapter,
 			notificationAdapter,
 			persistenceAdapter,

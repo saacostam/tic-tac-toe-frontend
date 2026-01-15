@@ -1,5 +1,5 @@
 import type { IAnalyticsAdapter } from "@/shared/adapters/analytics/domain";
-import type { IAuthAdapter } from "@/shared/adapters/auth/domain";
+import type { ISessionAdapter } from "@/shared/adapters/auth/domain";
 import type { IErrorMonitoringAdapter } from "@/shared/adapters/error-monitoring/domain";
 import type { INavigationAdapter } from "@/shared/adapters/navigation/domain";
 import type { INotificationAdapter } from "@/shared/adapters/notification/domain";
@@ -13,7 +13,7 @@ import type { IUuidAdapter } from "@/shared/adapters/uuid/domain";
  */
 export interface IAdapters {
 	analyticsAdapter: IAnalyticsAdapter;
-	authAdapter: IAuthAdapter;
+	sessionAdapter: ISessionAdapter;
 	errorMonitoringAdapter: IErrorMonitoringAdapter;
 	navigationAdapter: INavigationAdapter;
 	notificationAdapter: INotificationAdapter;

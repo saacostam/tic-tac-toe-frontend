@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
-import type { IAuthAdapter, ISession } from "../../domain";
+import type { ISession, ISessionAdapter } from "../../domain";
 
-export const useAuthAdapter = (): IAuthAdapter => {
+export const useSessionAdapter = (): ISessionAdapter => {
 	const [session, setSession] = useState<ISession>({
 		type: "unauthenticated",
 	});

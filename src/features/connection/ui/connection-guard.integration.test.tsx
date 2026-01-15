@@ -7,13 +7,12 @@ import { ConnectionGuard } from ".";
 
 const navigationAdapter = new NavigationAdapter();
 
-function setupAuthGuard({
+function setupConnectionGuard({
 	pathname = "/home",
-	authState = { type: "unauthenticated" },
+	sessionState = { type: "unauthenticated" },
 }: {
 	pathname?: string;
-	authState?: ISession;
-	authError?: Error;
+	sessionState?: ISession;
 }) {
 	const push = vi.fn();
 
@@ -22,8 +21,8 @@ function setupAuthGuard({
 			getPathname: () => pathname,
 			push,
 		},
-		authAdapter: {
-			session: authState,
+		sessionAdapter: {
+			session: sessionState,
 		},
 		navigationAdapter,
 	};
@@ -31,13 +30,13 @@ function setupAuthGuard({
 	return { push, adapters };
 }
 
-describe("AuthGuard [Integration]", () => {
+describe("ConnectionGuard [Integration]", () => {
 	it("should render children if accessing a public route and unauthenticated", () => {
-		const { push, adapters } = setupAuthGuard({
+		const { push, adapters } = setupConnectionGuard({
 			pathname: navigationAdapter.generateRoute({
 				name: RouteName.LANDING,
 			}),
-			authState: { type: "unauthenticated" },
+			sessionState: { type: "unauthenticated" },
 		});
 
 		renderWithProviders(
@@ -53,11 +52,15 @@ describe("AuthGuard [Integration]", () => {
 	});
 
 	it("should render children if accessing a private route and authenticated", () => {
-		const { push, adapters } = setupAuthGuard({
+		const { push, adapters } = setupConnectionGuard({
 			pathname: navigationAdapter.generateRoute({
 				name: RouteName.HOME,
 			}),
-			authState: { type: "authenticated", userId: "token", onClear: () => {} },
+			sessionState: {
+				type: "authenticated",
+				userId: "token",
+				onClear: () => {},
+			},
 		});
 
 		renderWithProviders(
@@ -73,11 +76,11 @@ describe("AuthGuard [Integration]", () => {
 	});
 
 	it("should redirect to landing if unauthenticated on private route", async () => {
-		const { push, adapters } = setupAuthGuard({
+		const { push, adapters } = setupConnectionGuard({
 			pathname: navigationAdapter.generateRoute({
 				name: RouteName.HOME,
 			}),
-			authState: { type: "unauthenticated" },
+			sessionState: { type: "unauthenticated" },
 		});
 
 		renderWithProviders(
@@ -99,12 +102,16 @@ describe("AuthGuard [Integration]", () => {
 		});
 	});
 
-	it("should redirect to home if authenticated and accessing auth route", async () => {
-		const { push, adapters } = setupAuthGuard({
+	it("should redirect to home if authenticated and accessing public route", async () => {
+		const { push, adapters } = setupConnectionGuard({
 			pathname: navigationAdapter.generateRoute({
 				name: RouteName.LANDING,
 			}),
-			authState: { type: "authenticated", userId: "token", onClear: () => {} },
+			sessionState: {
+				type: "authenticated",
+				userId: "token",
+				onClear: () => {},
+			},
 		});
 
 		renderWithProviders(
