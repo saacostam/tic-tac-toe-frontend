@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/dom";
-import type { ISession } from "@/shared/adapters/auth/domain";
 import { RouteName } from "@/shared/adapters/navigation/domain";
 import { NavigationAdapter } from "@/shared/adapters/navigation/infra";
+import type { ISession } from "@/shared/adapters/session/domain";
 import { renderWithProviders } from "@/tests";
 import { ConnectionGuard } from ".";
 

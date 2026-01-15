@@ -1,13 +1,13 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { HashRouter } from "react-router";
 import { useMockAnalyticsProvider } from "@/shared/adapters/analytics/infra";
-import { useSessionAdapter } from "@/shared/adapters/auth/infra";
 import { useMockErrorMonitoringAdapter } from "@/shared/adapters/error-monitoring/infra";
 import { NavigationAdapter } from "@/shared/adapters/navigation/infra";
 import { NavigationProvider } from "@/shared/adapters/navigation/ui";
 import { useNotificationAdapter } from "@/shared/adapters/notification/infra";
 import { useLocalStoragePersistenceAdapter } from "@/shared/adapters/persistence/infra";
 import { useReactRouterAdapter } from "@/shared/adapters/router/infra";
+import { useSessionAdapter } from "@/shared/adapters/session/infra";
 import { useThemeAdapterImpl } from "@/shared/adapters/theme/infra";
 import { useUuidAdapter } from "@/shared/adapters/uuid/infra";
 import { AdaptersContext } from "../app";
