@@ -20,6 +20,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 		() => gameService.createBoardFromTurns(game.turns),
 		[game.turns],
 	);
+	const hostUserId = useMemo(() => game.userIds.at(0), [game.userIds]);
 
 	const sendTurn = useMutationSendTurn();
 
@@ -80,7 +81,11 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 										isValidMove={isValidMove}
 										onClickCell={() => onClickCell(x, y)}
 										value={
-											cell === null ? "empty" : cell === userId ? "p1" : "p2"
+											cell === null
+												? "empty"
+												: cell === hostUserId
+													? "p1"
+													: "p2"
 										}
 									/>
 								</Grid.Col>
