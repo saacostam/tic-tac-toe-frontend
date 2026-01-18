@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running frontend checks..."
+
+cd frontend || exit 1
+
+bun run pre-commit

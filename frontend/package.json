@@ -12,7 +12,6 @@
     "test": "bunx vitest",
     "test:dry": "bunx vitest run",
     "preview": "vite preview",
-    "prepare": "husky",
     "pre-commit": "bun check && bun run build && bun run test:dry"
   },
   "dependencies": {
@@ -42,7 +41,6 @@
     "@vitejs/plugin-react": "^5.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "globals": "^16.5.0",
-    "husky": "^9.1.7",
     "jsdom": "^27.4.0",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
