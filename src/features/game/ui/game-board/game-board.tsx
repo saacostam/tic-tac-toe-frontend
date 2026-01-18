@@ -1,4 +1,12 @@
-import { Box, Container, Grid, Group, Space, Text } from "@mantine/core";
+import {
+	Box,
+	Button,
+	Container,
+	Grid,
+	Group,
+	Space,
+	Text,
+} from "@mantine/core";
 import { useMemo } from "react";
 import { useAdapters } from "@/shared/adapters/core/app";
 import type { OptimDataSetter } from "@/shared/async-state";
@@ -26,7 +34,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 	const sendTurn = useMutationSendTurn();
 	const endGame = useMutationEndGame();
 
-	const onClickBackToLobby = () => {
+	const onClickQuit = () => {
 		endGame.fastMutate(
 			{
 				userId,
@@ -36,7 +44,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 				onError: (e) => {
 					notificationAdapter.notify({
 						type: "error",
-						msg: getErrorCopy(e, "We couldn't return to the lobby."),
+						msg: getErrorCopy(e, "We couldn't quit."),
 					});
 				},
 			},
@@ -82,6 +90,9 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 					<Text fw="bold" size="xl">
 						🎮 Game: {game.id.slice(0, 10)}
 					</Text>
+					<Button loading={endGame.isPending} onClick={onClickQuit}>
+						Quit
+					</Button>
 				</Group>
 				<Space my="md" />
 				<Container size="sm">
@@ -119,7 +130,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 				isBackToLobbyLoading={endGame.isPending}
 				isOpen={game.status === "finished"}
 				isUserWinner={game.winnerPlayerId === userId}
-				onClickBackToLobby={onClickBackToLobby}
+				onClickBackToLobby={onClickQuit}
 			/>
 		</>
 	);

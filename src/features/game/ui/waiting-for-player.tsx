@@ -33,7 +33,7 @@ export function WaitingForPlayer({ game, userId }: WaitingForPlayerProps) {
 				onError: (e) => {
 					notificationAdapter.notify({
 						type: "error",
-						msg: getErrorCopy(e, "We couldn't return to the lobby."),
+						msg: getErrorCopy(e, "We couldn't quit."),
 					});
 				},
 			},

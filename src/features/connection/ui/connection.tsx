@@ -89,12 +89,26 @@ export function Connection() {
 						});
 						cleanup();
 					},
-					onGamesChanged: () => {
+					onGamesChanged: (msg) => {
+						if (msg) {
+							notificationAdapter.notify({
+								type: "info",
+								msg,
+							});
+						}
+
 						queryClient.invalidateQueries({
 							queryKey: [QueryKeys.AVAILABLE_ROOMS],
 						});
 					},
-					onUserGameChanged: () => {
+					onUserGameChanged: (msg) => {
+						if (msg) {
+							notificationAdapter.notify({
+								type: "info",
+								msg,
+							});
+						}
+
 						queryClient.invalidateQueries({
 							queryKey: [QueryKeys.USER_GAME],
 						});

@@ -82,10 +82,10 @@ export class ConnectionClient implements IConnectionClient {
 							if (message) args.onConnect(message);
 							break;
 						case "GAMES_CHANGED":
-							args.onGamesChanged();
+							args.onGamesChanged(message ?? undefined);
 							break;
 						case "USER_GAME_CHANGED":
-							args.onUserGameChanged();
+							args.onUserGameChanged(message ?? undefined);
 							break;
 						case "USER_GAME_REMOVED":
 							args.onUserGameRemoved();

@@ -7,8 +7,8 @@ export interface IConnectionClientPayload {
 	JoinIn: {
 		name: string;
 		onConnect: (id: string | null) => void;
-		onGamesChanged: () => void;
-		onUserGameChanged: () => void;
+		onGamesChanged: (msg?: string) => void;
+		onUserGameChanged: (msg?: string) => void;
 		onUserGameRemoved: () => void;
 		onDisconnect: () => void;
 	};
