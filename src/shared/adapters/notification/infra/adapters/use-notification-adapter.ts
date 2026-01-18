@@ -15,13 +15,19 @@ export function useNotificationAdapter({
 			const msg = args.msg;
 			const type = args.type;
 
-			const title = args.type === "error" ? "Error" : "Success";
+			const title =
+				args.type === "error"
+					? "Error"
+					: args.type === "success"
+						? "Success"
+						: "Info";
 
 			showNotification({
 				id: uuidAdapter.gen(),
 				message: msg,
 				title,
-				color: type === "error" ? "red" : "green",
+				color:
+					type === "error" ? "red" : type === "success" ? "green" : "indigo",
 				withCloseButton: true,
 			});
 		},

@@ -4,7 +4,7 @@ export interface INotificationAdapter {
 
 export interface INotificationAdapterPayload {
 	NotifyIn: {
-		type: "success" | "error";
+		type: "success" | "error" | "info";
 		msg: string;
 		title?: string;
 	};
