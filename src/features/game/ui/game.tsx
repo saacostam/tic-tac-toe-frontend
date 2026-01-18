@@ -33,7 +33,10 @@ export function Game() {
 			<GameLobby userId={sessionAdapter.session.userId} />
 		) : userGame.data.userIds.length < TOTAL_PLAYERS &&
 			userGame.data.status === "started" ? (
-			<WaitingForPlayer game={userGame.data} />
+			<WaitingForPlayer
+				game={userGame.data}
+				userId={sessionAdapter.session.userId}
+			/>
 		) : (
 			<GameBoard
 				game={userGame.data}
