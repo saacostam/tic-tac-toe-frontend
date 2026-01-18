@@ -1,3 +1,4 @@
+import { DomainError, DomainErrorType } from "@/shared/errors/domain";
 import type {
 	IGame,
 	IGameClient,
@@ -10,7 +11,27 @@ const BASE_HTTP_URL = "http://localhost:8000";
 export class GameClient implements IGameClient {
 	async createGame(args: IGameClientPayload["CreateGameReq"]): Promise<void> {
 		const url = new URL(`/${args.userId}/games`, BASE_HTTP_URL);
-		await fetch(url.toString(), { method: "POST" });
+
+		const res = await fetch(url.toString(), { method: "POST" });
+
+		if (!res.ok) {
+			let message = "Failed to create game";
+
+			try {
+				const data = await res.json();
+				if (typeof data?.message === "string") {
+					message = data.message;
+				}
+			} catch {
+				// ignore parse errors
+			}
+
+			throw new DomainError({
+				userMsg: message,
+				msg: message,
+				type: DomainErrorType.UNKNOWN,
+			});
+		}
 	}
 
 	async joinGame(args: IGameClientPayload["JoinGameReq"]): Promise<void> {
@@ -18,23 +39,74 @@ export class GameClient implements IGameClient {
 			`/${args.userId}/games/${args.gameId}/join`,
 			BASE_HTTP_URL,
 		);
-		await fetch(url.toString(), { method: "POST" });
+
+		const res = await fetch(url.toString(), { method: "POST" });
+
+		if (!res.ok) {
+			let message = "Failed to join game";
+
+			try {
+				const data = await res.json();
+				if (typeof data?.message === "string") {
+					message = data.message;
+				}
+			} catch {
+				// ignore parse errors
+			}
+
+			throw new DomainError({
+				userMsg: message,
+				msg: message,
+				type: DomainErrorType.UNKNOWN,
+			});
+		}
 	}
 
 	async queryGames(): Promise<IGame[]> {
 		const url = new URL("/games", BASE_HTTP_URL);
-		const resp = await fetch(url.toString());
+
+		const res = await fetch(url.toString());
+
+		if (!res.ok) {
+			let message = "Failed to fetch games";
+
+			try {
+				const data = await res.json();
+				if (typeof data?.message === "string") {
+					message = data.message;
+				}
+			} catch {
+				// ignore parse errors
+			}
+
+			throw new DomainError({
+				userMsg: message,
+				msg: message,
+				type: DomainErrorType.UNKNOWN,
+			});
+		}
+
+		if (res.status === 204) {
+			return [];
+		}
+
 		const data: null | Array<{
 			ID: string;
-			Players: Array<string>;
+			Players: string[];
 			Turns: [];
-		}> = await resp.json();
+			Status: 0 | 1;
+			WinnerPlayerId: string | null;
+		}> = await res.json();
 
-		if (data === null) return [];
+		if (data === null) {
+			return [];
+		}
 
 		return data.map((entry) => ({
 			id: entry.ID,
 			userIds: entry.Players,
+			status: entry.Status === 0 ? "started" : "finished",
+			winnerPlayerId: entry.WinnerPlayerId,
 		}));
 	}
 
@@ -43,6 +115,30 @@ export class GameClient implements IGameClient {
 	): Promise<WithTurns<IGame> | null> {
 		const url = new URL(`/${args.userId}/games`, BASE_HTTP_URL);
 		const resp = await fetch(url.toString());
+
+		if (!resp.ok) {
+			let message = "Failed to fetch game";
+
+			try {
+				const data = await resp.json();
+				if (typeof data?.message === "string") {
+					message = data.message;
+				}
+			} catch {
+				// ignore parse errors
+			}
+
+			throw new DomainError({
+				userMsg: message,
+				msg: message,
+				type: DomainErrorType.UNKNOWN,
+			});
+		}
+
+		// Some APIs return 204 No Content instead of null JSON
+		if (resp.status === 204) {
+			return null;
+		}
 
 		const data: null | {
 			ID: string;
@@ -54,6 +150,8 @@ export class GameClient implements IGameClient {
 						Y: number;
 						PlayerId: string;
 				  }[];
+			Status: 0 | 1;
+			WinnerPlayerId: string | null;
 		} = await resp.json();
 
 		if (data === null) return null;
@@ -66,6 +164,8 @@ export class GameClient implements IGameClient {
 				y: entry.Y,
 				x: entry.X,
 			})),
+			status: data.Status === 0 ? "started" : "finished",
+			winnerPlayerId: data.WinnerPlayerId,
 		};
 	}
 
@@ -74,12 +174,35 @@ export class GameClient implements IGameClient {
 			`/${args.userId}/games/${args.gameId}/turn`,
 			BASE_HTTP_URL,
 		);
-		await fetch(url.toString(), {
+
+		const res = await fetch(url.toString(), {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
 			body: JSON.stringify({
 				y: args.y,
 				x: args.x,
 			}),
 		});
+
+		if (!res.ok) {
+			let message = "Failed to send turn";
+
+			try {
+				const data = await res.json();
+				if (typeof data?.error === "string") {
+					message = data.error;
+				}
+			} catch {
+				// ignore JSON parse errors
+			}
+
+			throw new DomainError({
+				userMsg: message,
+				msg: message,
+				type: DomainErrorType.UNKNOWN,
+			});
+		}
 	}
 }

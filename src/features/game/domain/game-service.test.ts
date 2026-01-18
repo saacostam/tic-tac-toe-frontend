@@ -6,6 +6,8 @@ const createGame = (turns: ITurn[]): WithTurns<IGame> => ({
 	id: "game-1",
 	userIds: ["p1", "p2"],
 	turns,
+	status: "started",
+	winnerPlayerId: null,
 });
 
 describe("gameService", () => {

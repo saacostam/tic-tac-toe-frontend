@@ -1,6 +1,8 @@
 export interface IGame {
 	id: string;
 	userIds: Array<string>;
+	status: "started" | "finished";
+	winnerPlayerId: string | null;
 }
 
 export interface ITurn {

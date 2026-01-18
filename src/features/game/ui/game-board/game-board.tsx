@@ -38,7 +38,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 			];
 		});
 
-		sendTurn.fastMutate(
+		sendTurn.mutate(
 			{
 				userId,
 				gameId: game.id,
