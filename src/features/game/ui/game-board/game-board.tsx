@@ -3,9 +3,10 @@ import { useMemo } from "react";
 import { useAdapters } from "@/shared/adapters/core/app";
 import type { OptimDataSetter } from "@/shared/async-state";
 import { getErrorCopy } from "@/shared/errors/domain";
-import { useMutationSendTurn } from "../../app";
+import { useMutationEndGame, useMutationSendTurn } from "../../app";
 import { gameService, type IGame, type WithTurns } from "../../domain";
 import { GameBoardCell } from "./game-board-cell";
+import { GameBoardWinModal } from "./game-board-win-modal";
 
 export interface GameBoardProps {
 	game: WithTurns<IGame>;
@@ -23,6 +24,24 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 	const hostUserId = useMemo(() => game.userIds.at(0), [game.userIds]);
 
 	const sendTurn = useMutationSendTurn();
+	const endGame = useMutationEndGame();
+
+	const onClickBackToLobby = () => {
+		endGame.fastMutate(
+			{
+				userId,
+				gameId: game.id,
+			},
+			{
+				onError: (e) => {
+					notificationAdapter.notify({
+						type: "error",
+						msg: getErrorCopy(e, "We couldn't return to the lobby."),
+					});
+				},
+			},
+		);
+	};
 
 	const onClickCell = (x: number, y: number) => {
 		optimSetter((game) => {
@@ -57,43 +76,51 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 	};
 
 	return (
-		<Box>
-			<Group align="center" justify="space-between">
-				<Text fw="bold" size="xl">
-					🎮 Game: {game.id.slice(0, 10)}
-				</Text>
-			</Group>
-			<Space my="md" />
-			<Container size="sm">
-				<Grid>
-					{board.map((row, y) =>
-						row.map((cell, x) => {
-							const isValidMove = gameService.canApplyTurn(game, {
-								playerId: userId,
-								y,
-								x,
-							});
+		<>
+			<Box>
+				<Group align="center" justify="space-between">
+					<Text fw="bold" size="xl">
+						🎮 Game: {game.id.slice(0, 10)}
+					</Text>
+				</Group>
+				<Space my="md" />
+				<Container size="sm">
+					<Grid>
+						{board.map((row, y) =>
+							row.map((cell, x) => {
+								const isValidMove = gameService.canApplyTurn(game, {
+									playerId: userId,
+									y,
+									x,
+								});
 
-							return (
-								<Grid.Col key={`${y}-${+x}`} span={{ base: 4 }}>
-									<GameBoardCell
-										disabled={sendTurn.isPending || !isValidMove}
-										isValidMove={isValidMove}
-										onClickCell={() => onClickCell(x, y)}
-										value={
-											cell === null
-												? "empty"
-												: cell === hostUserId
-													? "p1"
-													: "p2"
-										}
-									/>
-								</Grid.Col>
-							);
-						}),
-					)}
-				</Grid>
-			</Container>
-		</Box>
+								return (
+									<Grid.Col key={`${y}-${+x}`} span={{ base: 4 }}>
+										<GameBoardCell
+											disabled={sendTurn.isPending || !isValidMove}
+											isValidMove={isValidMove}
+											onClickCell={() => onClickCell(x, y)}
+											value={
+												cell === null
+													? "empty"
+													: cell === hostUserId
+														? "p1"
+														: "p2"
+											}
+										/>
+									</Grid.Col>
+								);
+							}),
+						)}
+					</Grid>
+				</Container>
+			</Box>
+			<GameBoardWinModal
+				isBackToLobbyLoading={endGame.isPending}
+				isOpen={game.status === "finished"}
+				isUserWinner={game.winnerPlayerId === userId}
+				onClickBackToLobby={onClickBackToLobby}
+			/>
+		</>
 	);
 }

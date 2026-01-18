@@ -1,4 +1,5 @@
 export * from "./use-mutation-create-game";
+export * from "./use-mutation-end-game";
 export * from "./use-mutation-join-game";
 export * from "./use-mutation-send-turn";
 

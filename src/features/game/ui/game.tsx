@@ -31,7 +31,8 @@ export function Game() {
 	if (userGame.isSuccess && sessionAdapter.session.type === "authenticated")
 		return userGame.data === null ? (
 			<GameLobby userId={sessionAdapter.session.userId} />
-		) : userGame.data.userIds.length < TOTAL_PLAYERS ? (
+		) : userGame.data.userIds.length < TOTAL_PLAYERS &&
+			userGame.data.status === "started" ? (
 			<WaitingForPlayer game={userGame.data} />
 		) : (
 			<GameBoard

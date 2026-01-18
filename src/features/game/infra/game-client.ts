@@ -34,6 +34,34 @@ export class GameClient implements IGameClient {
 		}
 	}
 
+	async endGame(args: IGameClientPayload["EndGameReq"]): Promise<void> {
+		const url = new URL(
+			`/${args.userId}/games/${args.gameId}/end`,
+			BASE_HTTP_URL,
+		);
+
+		const res = await fetch(url.toString(), { method: "POST" });
+
+		if (!res.ok) {
+			let message = "Failed to end game";
+
+			try {
+				const data = await res.json();
+				if (typeof data?.message === "string") {
+					message = data.message;
+				}
+			} catch {
+				// ignore parse errors
+			}
+
+			throw new DomainError({
+				userMsg: message,
+				msg: message,
+				type: DomainErrorType.UNKNOWN,
+			});
+		}
+	}
+
 	async joinGame(args: IGameClientPayload["JoinGameReq"]): Promise<void> {
 		const url = new URL(
 			`/${args.userId}/games/${args.gameId}/join`,

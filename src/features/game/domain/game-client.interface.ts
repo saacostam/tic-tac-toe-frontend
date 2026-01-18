@@ -2,6 +2,7 @@ import type { IGame, WithTurns } from "./game";
 
 export interface IGameClient {
 	createGame(args: IGameClientPayload["CreateGameReq"]): Promise<void>;
+	endGame(args: IGameClientPayload["EndGameReq"]): Promise<void>;
 	joinGame(args: IGameClientPayload["JoinGameReq"]): Promise<void>;
 	queryGames(): Promise<IGame[]>;
 	queryUserGame(
@@ -12,6 +13,10 @@ export interface IGameClient {
 
 export interface IGameClientPayload {
 	CreateGameReq: {
+		userId: string;
+	};
+	EndGameReq: {
+		gameId: string;
 		userId: string;
 	};
 	JoinGameReq: {
