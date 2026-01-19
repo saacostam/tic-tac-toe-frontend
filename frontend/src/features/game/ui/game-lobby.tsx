@@ -71,7 +71,7 @@ export function GameLobby({ userId }: GameLobbyProps) {
 	);
 
 	return (
-		<Flex direction="column" gap="md">
+		<Flex direction="column" gap="md" data-testid="game-lobby">
 			<Group align="center" justify="space-between">
 				<Text fw="bold" size="xl">
 					🌐 Game Lobby

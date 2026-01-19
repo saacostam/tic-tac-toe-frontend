@@ -84,7 +84,7 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 	};
 
 	return (
-		<>
+		<main data-testid="game-board">
 			<Box>
 				<Group align="center" justify="space-between">
 					<Text fw="bold" size="xl">
@@ -132,6 +132,6 @@ export function GameBoard({ game, optimSetter, userId }: GameBoardProps) {
 				isUserWinner={game.winnerPlayerId === userId}
 				onClickBackToLobby={onClickQuit}
 			/>
-		</>
+		</main>
 	);
 }

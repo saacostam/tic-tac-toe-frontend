@@ -41,7 +41,7 @@ export function WaitingForPlayer({ game, userId }: WaitingForPlayerProps) {
 	};
 
 	return (
-		<>
+		<main data-testid="waiting-for-players">
 			<Group align="center" justify="space-between">
 				<Text fw="bold" size="xl">
 					🎮 Game: {game.id.slice(0, 10)}
@@ -62,6 +62,6 @@ export function WaitingForPlayer({ game, userId }: WaitingForPlayerProps) {
 					</Text>
 				</Flex>
 			</Card>
-		</>
+		</main>
 	);
 }

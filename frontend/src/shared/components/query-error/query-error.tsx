@@ -14,7 +14,12 @@ export function QueryError({ msg, retry, title: _title }: QueryErrorProps) {
 	const title = _title ?? "Something went wrong!";
 
 	return (
-		<Alert color="red" icon={<ExclamationCircleIcon />} title={title}>
+		<Alert
+			color="red"
+			data-testid="query-error"
+			icon={<ExclamationCircleIcon />}
+			title={title}
+		>
 			{msg}
 			<Flex justify="end">
 				<Button color="red" loading={retry.isPending} onClick={retry.onClick}>
