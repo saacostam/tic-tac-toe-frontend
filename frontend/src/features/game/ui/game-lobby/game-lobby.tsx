@@ -7,7 +7,8 @@ import {
 	useMutationCreateGame,
 	useMutationJoinGame,
 	useQueryGames,
-} from "../app";
+} from "../../app";
+import { GameLobbyRoomItem } from "./game-lobby-room-item";
 
 export interface GameLobbyProps {
 	userId: string;
@@ -90,54 +91,29 @@ export function GameLobby({ userId }: GameLobbyProps) {
 				/>
 			)}
 			{games.isLoading && <SuspenseLoader style={{ height: "8rem" }} />}
-			{games.isSuccess &&
-				(games.data.length <= 0 ? (
-					<Card withBorder>
-						<EmptyQuery
-							title="No Rooms Available!"
-							description="Create a room or wait for one to appear"
-						/>
-					</Card>
-				) : (
-					<Grid gutter="md">
-						{games.data.map((game) => (
-							<Grid.Col key={game.id} span={{ base: 12, md: 6 }}>
-								<Card
-									component="button"
-									type="button"
-									withBorder
-									style={{
-										cursor: "pointer",
-										width: "100%",
-										textAlign: "left",
-									}}
-									onClick={() => onClickJoinGame(game.id)}
-									aria-label={`Join game ${game.id.slice(0, 10)}`}
-								>
-									<Group align="center" gap="xs">
-										<div
-											style={{
-												borderRadius: "50%",
-												backgroundColor:
-													game.userIds.length < 2
-														? "var(--mantine-color-yellow-5)"
-														: "var(--mantine-color-green-5)",
-												height: "1rem",
-												width: "1rem",
-											}}
-										></div>
-										<Text fw="bold" size="lg">
-											{game.id.slice(0, 10)}
-										</Text>
-									</Group>
-									<Text c="var(--mantine-color-dark-2)" size="sm">
-										{game.userIds.length}/2 Players
-									</Text>
-								</Card>
-							</Grid.Col>
-						))}
-					</Grid>
-				))}
+			{games.isSuccess && (
+				<main data-testid="game-lobby-content">
+					{games.data.length <= 0 ? (
+						<Card withBorder>
+							<EmptyQuery
+								title="No Rooms Available!"
+								description="Create a room or wait for one to appear"
+							/>
+						</Card>
+					) : (
+						<Grid>
+							{games.data.map((game) => (
+								<Grid.Col key={game.id} span={{ base: 12, md: 6 }}>
+									<GameLobbyRoomItem
+										game={game}
+										onClickJoinGame={onClickJoinGame}
+									/>
+								</Grid.Col>
+							))}
+						</Grid>
+					)}
+				</main>
+			)}
 		</Flex>
 	);
 }
