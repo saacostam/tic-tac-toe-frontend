@@ -11,7 +11,7 @@ export function EmptyQuery({
 	description = "Once something is available, it will be visible here",
 }: EmptyQueryProps) {
 	return (
-		<Flex align="center" direction="column">
+		<Flex align="center" direction="column" data-testid="empty-query">
 			<ThemeIcon variant="light" size="xl" mb="sm">
 				<CubeTransparentIcon />
 			</ThemeIcon>
